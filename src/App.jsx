@@ -12,9 +12,10 @@ const courses = [
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.'
 const shortLorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.'
+const assetUrl = (file) => `${import.meta.env.BASE_URL}${file}`
 
 function Logo() {
-  return <Link to="/" className="logo-link" aria-label="Enfoque 360"><img src="/logo-enfoque360.png" alt="Enfoque 360" /></Link>
+  return <Link to="/" className="logo-link" aria-label="Enfoque 360"><img src={assetUrl('logo-enfoque360.png')} alt="Enfoque 360" /></Link>
 }
 
 function Header() {
@@ -48,7 +49,7 @@ function VideoFrame({ compact = false }) {
 
 function BookCover({ course, small = false }) {
   return (
-    <div className={`book-wrap ${small ? 'small' : ''}`} style={{ '--tone': course.tone, '--dark': course.dark }}>
+    <div className={`book-wrap ${small ? 'small' : ''}`} style={{ '--tone': course.tone, '--dark': course.dark, '--book-image': `url("${assetUrl('libro-base.jpg')}")` }}>
       <div className="book-spine" />
       <div className="book-cover">
         <div className="cover-no">{course.number}</div>

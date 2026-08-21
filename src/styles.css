@@ -70,7 +70,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .course-card.active { transform: translateX(-50%) translateZ(20px) scale(1.05); }
 .book-wrap { position: relative; width: 220px; height: 292px; margin: 0 auto 28px; transform-style: preserve-3d; transform: rotateY(-8deg) rotateX(2deg); filter: drop-shadow(16px 22px 18px rgba(15,28,43,.25)); }
 .book-cover { position: absolute; inset: 0; padding: 27px 25px; overflow: hidden; color: white; border-radius: 3px 9px 9px 3px; background: linear-gradient(150deg, color-mix(in srgb,var(--dark) 86%, white), var(--dark)); box-shadow: inset 8px 0 10px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.2); }
-.book-cover::before { content: ''; position: absolute; inset: 0; opacity: .18; mix-blend-mode: soft-light; background: url('/libro-base.jpg') 45% 48%/260% auto no-repeat; }
+.book-cover::before { content: ''; position: absolute; inset: 0; opacity: .18; mix-blend-mode: soft-light; background: var(--book-image) 45% 48%/260% auto no-repeat; }
 .book-cover::after { content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%; right: -45px; bottom: -35px; border: 18px solid var(--tone); opacity: .8; }
 .book-spine { position: absolute; z-index: 2; top: 2px; bottom: 2px; left: -10px; width: 20px; transform: rotateY(60deg); transform-origin: right; border-radius: 4px 0 0 4px; background: color-mix(in srgb,var(--dark) 72%, black); }
 .book-pages { position: absolute; z-index: -1; top: 6px; right: -8px; bottom: 5px; width: 13px; transform: rotateY(26deg); background: repeating-linear-gradient(to right,#f3ead8 0 1px,#cfc4b0 1px 2px); }
