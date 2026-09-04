@@ -77,6 +77,7 @@ function CourseCarousel() {
           return <button key={course.id} className={active === index ? 'selected' : ''} aria-pressed={active === index} onClick={() => setActive(index)} style={{ '--course-tone': course.tone, '--course-light': course.light }}><Icon aria-hidden="true" /><span>{course.title}</span><ArrowRight size={16} aria-hidden="true" /></button>
         })}
       </div>
+      <div className="carousel-viewport">
       <button className="carousel-arrow left" onClick={() => move(-1)} aria-label="Curso anterior"><ChevronLeft /></button>
       <div className="course-stage" aria-live="polite">
         {courses.map((course, index) => {
@@ -87,6 +88,7 @@ function CourseCarousel() {
             <article
               key={course.id}
               className={`course-card ${offset === 0 ? 'active' : ''}`}
+              data-distance={Math.abs(offset)}
               style={{ '--offset': offset, '--abs': Math.abs(offset), '--course-tone': course.tone, '--course-light': course.light, zIndex: 10 - Math.abs(offset) }}
               onClick={() => setActive(index)}
             >
@@ -105,6 +107,7 @@ function CourseCarousel() {
         })}
       </div>
       <button className="carousel-arrow right" onClick={() => move(1)} aria-label="Curso siguiente"><ChevronRight /></button>
+      </div>
       <div className="carousel-dots">
         {courses.map((course, index) => <button key={course.id} aria-label={`Mostrar ${course.title}`} className={index === active ? 'active' : ''} onClick={() => setActive(index)} />)}
       </div>
