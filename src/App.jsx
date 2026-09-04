@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, Link, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronLeft, ChevronRight, MessageCircle, Play, Sparkles } from 'lucide-react'
+import { Routes, Route, Link, useParams, useLocation } from 'react-router-dom'
+import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronLeft, ChevronRight, MessageCircle, Play, Sparkles, HeartPulse, Coins, Cross, Compass, Lightbulb } from 'lucide-react'
 
 const courses = [
-  { id: 'curso-01', number: '01', tone: '#85aa3c', dark: '#173b67', title: 'Curso 01' },
-  { id: 'curso-02', number: '02', tone: '#f2b53d', dark: '#2f3d51', title: 'Curso 02' },
-  { id: 'curso-03', number: '03', tone: '#ef765e', dark: '#233f62', title: 'Curso 03' },
-  { id: 'curso-04', number: '04', tone: '#55a9a4', dark: '#193d59', title: 'Curso 04' },
-  { id: 'curso-05', number: '05', tone: '#9d72c5', dark: '#263957', title: 'Curso 05' },
+  { id: 'curso-01', number: '01', tone: '#376B50', dark: '#204635', title: 'Vida saludable', icon: HeartPulse, light: '#EDF4EE' },
+  { id: 'curso-02', number: '02', tone: '#2F7D6D', dark: '#154F46', title: 'Finanzas', icon: Coins, light: '#EAF4F1' },
+  { id: 'curso-03', number: '03', tone: '#634781', dark: '#3E2C55', title: 'Formación teológica', icon: Cross, light: '#F2EDF6' },
+  { id: 'curso-04', number: '04', tone: '#284F80', dark: '#193555', title: 'Desarrollo personal', icon: Compass, light: '#ECF1F7' },
+  { id: 'curso-05', number: '05', tone: '#98691E', dark: '#604414', title: 'Creatividad', icon: Lightbulb, light: '#FAF2E4' },
 ]
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.'
@@ -15,18 +15,19 @@ const shortLorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
 const assetUrl = (file) => `${import.meta.env.BASE_URL}${file}`
 
 function Logo() {
-  return <Link to="/" className="logo-link" aria-label="Enfoque 360"><img src={assetUrl('logo-enfoque360.png')} alt="Enfoque 360" /></Link>
+  return <Link to="/" className="logo-link brand-wordmark" aria-label="Enfoque 360"><span className="brand-ring" aria-hidden="true">360</span><span>ENFOQUE<span className="brand-sub">360</span></span></Link>
 }
 
 function Header() {
   return (
-    <header className="site-header">
+    <header id="top" className="site-header">
       <div className="container-wide header-inner">
         <Logo />
         <nav aria-label="Navegación principal">
-          <a href="/#cursos">Cursos</a>
-          <a href="/#autores">Autores</a>
-          <a className="nav-cta" href="/#cursos">Ver cursos</a>
+          <Link to="/">Inicio</Link>
+          <a href={`${import.meta.env.BASE_URL}#cursos`}>Cursos</a>
+          <a href={`${import.meta.env.BASE_URL}#autores`}>Autores</a>
+          <a className="nav-cta" href={`${import.meta.env.BASE_URL}#cursos`}>Explorar cursos</a>
         </nav>
       </div>
     </header>
@@ -48,11 +49,12 @@ function VideoFrame({ compact = false }) {
 }
 
 function BookCover({ course, small = false }) {
+  const Icon = course.icon
   return (
     <div className={`book-wrap ${small ? 'small' : ''}`} style={{ '--tone': course.tone, '--dark': course.dark, '--book-image': `url("${assetUrl('libro-base.jpg')}")` }}>
       <div className="book-spine" />
       <div className="book-cover">
-        <div className="cover-no">{course.number}</div>
+        <div className="cover-no">{course.number}<Icon aria-hidden="true" /></div>
         <div className="cover-kicker">ENFOQUE 360</div>
         <div className="cover-title">{course.title}</div>
         <div className="cover-line" />
@@ -64,11 +66,17 @@ function BookCover({ course, small = false }) {
 }
 
 function CourseCarousel() {
-  const [active, setActive] = useState(2)
+  const [active, setActive] = useState(0)
   const move = (step) => setActive((prev) => (prev + step + courses.length) % courses.length)
 
   return (
     <div className="showcase-shell">
+      <div className="identity-picker" aria-label="Seleccionar curso">
+        {courses.map((course, index) => {
+          const Icon = course.icon
+          return <button key={course.id} className={active === index ? 'selected' : ''} aria-pressed={active === index} onClick={() => setActive(index)} style={{ '--course-tone': course.tone, '--course-light': course.light }}><Icon aria-hidden="true" /><span>{course.title}</span><ArrowRight size={16} aria-hidden="true" /></button>
+        })}
+      </div>
       <button className="carousel-arrow left" onClick={() => move(-1)} aria-label="Curso anterior"><ChevronLeft /></button>
       <div className="course-stage" aria-live="polite">
         {courses.map((course, index) => {
@@ -79,9 +87,8 @@ function CourseCarousel() {
             <article
               key={course.id}
               className={`course-card ${offset === 0 ? 'active' : ''}`}
-              style={{ '--offset': offset, '--abs': Math.abs(offset), zIndex: 10 - Math.abs(offset) }}
+              style={{ '--offset': offset, '--abs': Math.abs(offset), '--course-tone': course.tone, '--course-light': course.light, zIndex: 10 - Math.abs(offset) }}
               onClick={() => setActive(index)}
-              onMouseEnter={() => setActive(index)}
             >
               <BookCover course={course} />
               <div className="course-copy">
@@ -89,7 +96,7 @@ function CourseCarousel() {
                 <h3>{course.title}</h3>
                 <p>{shortLorem}</p>
                 <div className="card-actions">
-                  <a href="#comenzar" className="btn-primary-360">Comenzar</a>
+                  <Link to={`/curso/${course.id}#comenzar`} className="btn-primary-360">Comenzar</Link>
                   <Link to={`/curso/${course.id}`} className="btn-ghost-360">Más información <ArrowRight size={15} /></Link>
                 </div>
               </div>
@@ -107,9 +114,9 @@ function CourseCarousel() {
 
 function Authors() {
   const authors = [
-    { initials: 'A1', role: 'Autor 01', color: '#173b67' },
-    { initials: 'A2', role: 'Autor 02', color: '#85aa3c' },
-    { initials: 'A3', role: 'Autor 03', color: '#f2b53d' },
+    { initials: 'A1', role: 'Autor 01', color: '#123B4A' },
+    { initials: 'A2', role: 'Autor 02', color: '#2F7D6D' },
+    { initials: 'A3', role: 'Autor 03', color: '#98691E' },
   ]
   return (
     <section id="autores" className="authors-section">
@@ -152,7 +159,7 @@ function Home() {
           <div className="container-wide hero-grid">
             <div className="hero-copy">
               <span className="overline"><span /> Educación sin límites</span>
-              <h1>Programas que amplían tu <em>enfoque.</em></h1>
+              <h1>Aprende.<br />Crece.<br /><em>Transforma tu vida.</em></h1>
               <p>{lorem}</p>
               <div className="hero-actions">
                 <a className="btn-primary-360" href="#cursos">Explorar cursos <ArrowRight size={18} /></a>
@@ -176,7 +183,7 @@ function Home() {
           <div className="container-wide">
             <div className="section-heading">
               <span>Nuestros programas</span>
-              <h2>Elige tu próximo curso</h2>
+              <h2>¿Qué quieres aprender?</h2>
               <p>{shortLorem}</p>
             </div>
             <CourseCarousel />
@@ -204,13 +211,13 @@ function CourseDetail() {
   const { id } = useParams()
   const course = courses.find((item) => item.id === id) || courses[0]
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [id])
+    document.title = `${course.title} · Enfoque 360`
+  }, [course.title])
   const modules = ['Fundamentos', 'Perspectiva', 'Herramientas', 'Aplicación', 'Proyecto final']
   return (
     <>
       <Header />
-      <main className="detail-page">
+      <main className="detail-page" style={{ '--course-tone': course.tone, '--course-light': course.light }}>
         <section className="detail-hero" style={{ '--tone': course.tone }}>
           <div className="container-wide detail-grid">
             <div className="detail-cover"><BookCover course={course} /></div>
@@ -244,5 +251,17 @@ function Footer() {
 }
 
 export default function App() {
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (pathname === '/') document.title = 'Enfoque 360 · Cursos'
+    const frame = requestAnimationFrame(() => {
+      if (hash) {
+        document.getElementById(hash.slice(1))?.scrollIntoView()
+      } else {
+        window.scrollTo(0, 0)
+      }
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [pathname, hash])
   return <Routes><Route path="/" element={<Home />} /><Route path="/curso/:id" element={<CourseDetail />} /><Route path="*" element={<Home />} /></Routes>
 }
